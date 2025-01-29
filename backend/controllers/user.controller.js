@@ -2,7 +2,7 @@ import {User} from '../models/user.model.js';
 import {ApiError}  from '../utils/ApiError.js';
 import {ApiResponse} from '../utils/ApiResponse.js';
 import {asyncHandler} from '../utils/asyncHandler.js'
-
+import { BlacklistToken } from '../models/blacklistToken.model.js';
 
 const generateAccessAndRefreshToken = async(userId)=>{
     try {
@@ -118,5 +118,30 @@ const loginUser=asyncHandler(async(req,res)=>{
 
 })
 
+const getUserProfile=asyncHandler(async(req,res)=>{
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(200,req.user,"current used fetched successfully")
+        )  
+})
 
-export { registerUser,loginUser};
+const logoutUser=asyncHandler(async(req,res)=>{
+
+    const option={
+        httpOnly:true,
+        secure:true
+    }
+    
+    const accessToken=req.cookies.accessToken || req.header("Authorization")?.replace("Bearer ","")
+    await BlacklistToken.create({token:accessToken})
+
+    return  res
+    .status(200)
+    .clearCookie("accessToken",option)
+    .clearCookie("refreshToken",option)
+    .json(new ApiResponse(200,{},"user logout successfully"))
+})
+
+
+export { registerUser,loginUser,getUserProfile,logoutUser};
