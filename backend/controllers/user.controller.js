@@ -62,11 +62,11 @@ const registerUser=asyncHandler(async (req,res)=>{
 
 const loginUser=asyncHandler(async(req,res)=>{
 
-    const {email,username,password}=req.body
+    const {email,password}=req.body
 
-    if(!email && !username)
+    if(!email)
     {
-        throw new ApiError(400,"Email and username are required")
+        throw new ApiError(400,"Email are required")
     }
 
     if(!password)
@@ -74,9 +74,7 @@ const loginUser=asyncHandler(async(req,res)=>{
         throw new ApiError(400,"Password is required")
     }
 
-    const user=await User.findOne({
-        $or:[{email},{username}]
-    })
+    const user=await User.findOne({email})
 
     if(!user)
     {
