@@ -45,6 +45,7 @@ const registerUser=asyncHandler(async (req,res)=>{
         password,
     })
 
+
     const creadetUser=await User.findById(user._id).select(
         "-password -refreshToken"
     )

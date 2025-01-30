@@ -17,8 +17,13 @@ dotenv.config(
  app.use(express.urlencoded({ extended: true }))
  app.use(cookieParser())
 
+// for user
 import userRouter from "./routes/user.route.js"
-
 app.use("/api/v1/users",userRouter)
+
+//for captaion-driver
+import captainRouter from "./routes/captain.route.js"
+app.use("/api/v1/captain",captainRouter)
+
 
 export default app
